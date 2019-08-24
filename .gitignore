@@ -1,0 +1,13 @@
+backed blabla
+/backend/demo2
+/backend/craftnoteassassins/target
+/backend/craftnoteassassins/build
+/backend/craftnoteassassins/.gradle
+/backend/craftnoteassassins/.idea
+/backend/craftnoteassassins/.craftnoteassassins.iml
+
+/frontend/ang-app/.idea
+/frontend/ang-app/node_modules
+/frontend/ang-app/.editorconfig
+/frontend/ang-app/package-lock.json
+

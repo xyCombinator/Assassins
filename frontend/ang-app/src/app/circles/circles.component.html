@@ -1,0 +1,6 @@
+<button routerLink="new-circle" class="mat-stroked-button">Create new circle</button>
+<mat-list>
+  <mat-list-item *ngFor="let circle of circles">
+    <button (click)="setCurrentCircle(circle)" routerLink="circle/{{circle.getName()}}" mat-button> {{circle.getName()}}</button>
+  </mat-list-item>
+</mat-list>

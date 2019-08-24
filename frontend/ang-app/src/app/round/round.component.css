@@ -1,0 +1,21 @@
+.round{
+  width: 200px;
+  height: 200px;
+  margin: 3px;
+  color: red;
+  border:1px solid black;
+  padding: 7px;
+}
+
+.inner{
+  width: 40px;
+  height: 30px;
+  margin: 3px;
+  color: red;
+  border:1px solid black;
+}
+
+.first{
+  position: relative;
+  top: 12px;
+}

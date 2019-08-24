@@ -1,0 +1,16 @@
+<form [formGroup]="newCircleFormGroup">
+  <div>
+    <mat-form-field>
+      <mat-label>Name</mat-label>
+      <input formControlName="nameControl" matInput="text">
+    </mat-form-field>
+  </div>
+
+  <div>
+    <mat-form-field>
+      <mat-label>Maximale Spielerzahl</mat-label>
+      <input formControlName="maxNumberOfPlayers" matInput="number">
+    </mat-form-field>
+  </div>
+  <p>Input is: {{newCircleFormGroup.status}} </p>
+</form>
