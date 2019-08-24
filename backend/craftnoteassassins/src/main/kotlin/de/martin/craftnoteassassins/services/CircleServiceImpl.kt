@@ -68,9 +68,15 @@ class CircleServiceImpl : CircleService {
         return foundRels.map { it.circle }
     }
 
-    override fun createCircle(circleName: String, userDTO: UserDTO) {
+    override fun findCircle(circleName: String): Circle? {
+        val foundCircles = circleRepository.findByName(circleName)
+        return foundCircles.firstOrNull()
+    }
+
+
+    override fun createCircle(circleName: String, user: String) {
         val circle = circleRepository.findByName(circleName)
-        val user = userRepository.findByUsername(userDTO.user)
+        val user = userRepository.findByUsername(user)
 
         if (!circle.isEmpty() || user.isEmpty()) {
             return

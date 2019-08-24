@@ -12,13 +12,15 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 
+
 @Configuration
 @EnableWebSecurity
 class SecurityMatcher @Autowired constructor(val userDetailsService: UserDetailsService) : WebSecurityConfigurerAdapter() {
 
     @Throws(Exception::class)
     override fun configure(http: HttpSecurity) {
-        http.authorizeRequests().antMatchers("/register").permitAll().and().authorizeRequests().anyRequest().authenticated().and().httpBasic()
+        http.authorizeRequests().antMatchers("/register").permitAll().anyRequest().authenticated().and().httpBasic()
+        http.csrf().disable()
     }
 
     override fun configure(auth: AuthenticationManagerBuilder) {

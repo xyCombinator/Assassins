@@ -15,7 +15,8 @@ import { RoundComponent } from './round/round.component';
 import {RouterModule, Routes} from '@angular/router';
 import { NewCircleComponent } from './new-circle/new-circle.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { KillButtonComponent } from './kill-button/kill-button.component';
+import { CurrentRoundComponent } from './current-round/current-round.component';
+import { LoginComponent } from './login/login.component';
 
 
 
@@ -26,7 +27,8 @@ import { KillButtonComponent } from './kill-button/kill-button.component';
     CircleComponent,
     RoundComponent,
     NewCircleComponent,
-    KillButtonComponent,
+    CurrentRoundComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,

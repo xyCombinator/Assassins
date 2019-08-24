@@ -11,6 +11,7 @@ import de.martin.craftnoteassassins.repositories.UserCircleRepository
 import de.martin.craftnoteassassins.repositories.UserRepository
 import de.martin.craftnoteassassins.repositories.UserRoundRepository
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.lang.RuntimeException
@@ -57,10 +58,8 @@ class UserServiceImpl @Autowired constructor(private val repository: UserReposit
         if (!foundUsers.isEmpty()) {
             throw RuntimeException("User already exists")
         }
-        //val encryptedPassword = BCryptPasswordEncoder(4).encode(userDto.password)
-        //TODO
-        // encrypt passwords again!
-        val user = User(userDto.user, userDto.password)
+        val encryptedPassword = BCryptPasswordEncoder(4).encode(userDto.password)
+        val user = User(userDto.user, encryptedPassword)
         save(user)
     }
 

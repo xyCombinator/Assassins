@@ -6,10 +6,11 @@ import de.martin.craftnoteassassins.entities.Round
 
 
 interface CircleService {
-    fun createCircle(circleName: String, userDTO: UserDTO)
+    fun createCircle(circleName: String, owner: String)
     fun activateCircle(circleName: String)
     fun findUsersOfCircle(circleName: String): List<UserDTO>
     fun findCirclesOfUser(username: String): List<Circle>
+    fun findCircle(circleName: String): Circle?
     fun isUserAliveInCircle(username: String, circleName: String): Boolean
     fun findActiveRoundForCircle(circleName: String): Round?
 }

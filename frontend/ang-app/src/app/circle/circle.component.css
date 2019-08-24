@@ -1,3 +1,28 @@
 mat-card{
   max-width: 300px;
 }
+#current-round-wrapper{
+  display: flex;
+  margin: 50px;
+  font-family: Arial, Helvetica, sans-serif
+}
+#kill-area-left{
+  background-color: lightcoral;
+  border-radius:15px 0px 0px 15px;
+}
+#kill-area-right{
+  background-color: lightblue;
+  border-radius:0px 15px 15px 0px;
+
+}
+
+.round-block{
+  padding: 3px;
+  height: 200px;
+  width: 100px;
+}
+
+.victim-name{
+  width: 100%;
+  text-align: center
+}

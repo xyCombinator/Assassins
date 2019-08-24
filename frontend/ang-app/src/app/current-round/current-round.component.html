@@ -1,0 +1,23 @@
+<div id="current-round-wrapper">
+    <div (click)="killVictim()" id="kill-area-left" class="kill-area round-block">
+      <p class="victim-name">{{getNextVictim().userName}}</p>
+    </div>
+    <div class="round-block">
+      <div>Alive Symbol</div>
+      <div>
+        <ul>
+          <li *ngFor="let player of round?.livingPlayers">{{player.userName}}</li>
+        </ul>
+      </div>
+      <div>Dead Symbol</div>
+      <div>
+        <ul>
+          <li *ngFor="let player of round?.deadPlayers">{{player.userName}}</li>
+        </ul>
+      </div>
+  
+    </div>
+    <div id="kill-area-right" class="kill-area round-block">
+        <p class="victim-name">{{getNextVictim().userName}}</p>
+    </div>
+</div>

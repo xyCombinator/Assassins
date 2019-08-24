@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { KillButtonComponent } from './kill-button.component';
+import { CurrentRoundComponent } from './current-round.component';
 
-describe('KillButtonComponent', () => {
-  let component: KillButtonComponent;
-  let fixture: ComponentFixture<KillButtonComponent>;
+describe('CurrentRoundComponent', () => {
+  let component: CurrentRoundComponent;
+  let fixture: ComponentFixture<CurrentRoundComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ KillButtonComponent ]
+      declarations: [ CurrentRoundComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(KillButtonComponent);
+    fixture = TestBed.createComponent(CurrentRoundComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

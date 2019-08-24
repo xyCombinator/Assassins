@@ -1,40 +1,10 @@
-<p>
-<ul>
-  <mat-card *ngFor="let round of circle?.getRounds() | slice:0:1">
-    <mat-card-header></mat-card-header>
-    <mat-card-content>
-        <div>test</div>
-
-      <h3>Alive Players</h3>
-      <ul>
-        <li *ngFor="let player of round.livingPlayers">
-          {{player.userName}}
-        </li>
-      </ul>
-      <h3>Dead Players</h3>
-      <ul>
-        <li *ngFor="let player of round.deadPlayers">
-          {{player.userName}}
-        </li>
-      </ul>
-    </mat-card-content>
-  </mat-card>
-  <mat-card *ngFor="let round of circle?.getRounds() | slice:1">
-    <mat-card-header>Previous Rounds</mat-card-header>
-    <mat-card-content>
-      <h3>Alive Players</h3>
-      <ul>
-        <li *ngFor="let player of round.livingPlayers">
-          {{player.userName}}
-        </li>
-      </ul>
-      <h3>Dead Players</h3>
-      <ul>
-        <li *ngFor="let player of round.deadPlayers">
-          {{player.userName}}
-        </li>
-      </ul>
-    </mat-card-content>
-  </mat-card>
-</ul>
-
+<current-round (victimKilledEvent)="killVictim()" [round]="getCurrentRound()"></current-round>
+<mat-card>
+  <mat-card-header>
+      <mat-card-title>Round 1</mat-card-title>
+      <mat-card-subtitle>20.08.2019</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    John
+  </mat-card-content>
+</mat-card>
