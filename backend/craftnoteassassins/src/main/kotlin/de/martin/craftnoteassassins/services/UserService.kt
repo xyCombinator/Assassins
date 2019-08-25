@@ -1,9 +1,6 @@
 package de.martin.craftnoteassassins.services
 
-import de.martin.craftnoteassassins.dtos.CircleDTO
-import de.martin.craftnoteassassins.dtos.CircleParticipationDTO
-import de.martin.craftnoteassassins.dtos.PlayerDTO
-import de.martin.craftnoteassassins.dtos.UserDTO
+import de.martin.craftnoteassassins.dtos.*
 import de.martin.craftnoteassassins.entities.User
 import de.martin.craftnoteassassins.entities.UserCircleRelation
 import de.martin.craftnoteassassins.repositories.CircleRepository
@@ -18,7 +15,8 @@ import java.lang.RuntimeException
 
 interface UserService {
     fun save(user: User)
-    fun findByUsername(username: String): List<UserDTO>
+    fun findByUsername(username: String): UserDTO?
+    fun findByUsernameForPrincipal(username: String): UserDTO?
     fun registerUser(userDto: UserDTO)
     fun joinCircle(username: String, circleName: String)
     fun findNextVictim(username: String, circlename: String): UserDTO?
@@ -35,12 +33,45 @@ class UserServiceImpl @Autowired constructor(private val repository: UserReposit
         repository.count()
     }
 
-    override fun findByUsername(username: String): List<UserDTO> {
-        return findByUsernameInt(username).map { user -> UserDTO(user.username, user.password) }
+    override fun findByUsername(username: String): UserDTO? {
+        val user = findByUsernameInt(username).firstOrNull()
+        if (user === null) {
+            return null
+        }
+        val circles = user.circles.map { CircleDTO(it.circle.name) }
+        val rounds = userRoundRepository.findByUser(user).map { it.round }
+        val roundDtos: List<RoundDTO> = rounds.map {
+            val n = it.roundNumber
+            val alivePlayers = it.relations.filter { it.eliminated == -1 }.map { UserDTO(it.user.username, null) }
+            val deadPlayers = it.relations.filter { it.eliminated != -1 }.map { UserDTO(it.user.username, null) }
+
+            val round = RoundDTO(n, it.circle.name, alivePlayers, deadPlayers)
+            if (alivePlayers.size > 1) {
+                val nextVictim = findNextVictim(user.username, it.circle.name)
+                round.nextVictim = nextVictim
+            }
+            round
+        }
+
+        roundDtos.forEach {
+            val circleName = it.circleName
+            val circle = circles.firstOrNull { it.name === circleName }
+            if (circle !== null) {
+                circle.rounds.add(it)
+            }
+        }
+
+        val userDTO = UserDTO(username, null)
+        userDTO.circles = circles
+        return userDTO
+    }
+
+    override fun findByUsernameForPrincipal(username: String): UserDTO? {
+        return findByUsernameInt(username).map { UserDTO(it.username, it.password) }.firstOrNull()
     }
 
     private fun findByUsernameInt(username: String): List<User> {
-        return repository.findByUsername(username);
+        return repository.findByUsername(username)
     }
 
     override fun joinCircle(username: String, circlename: String) {
@@ -54,12 +85,12 @@ class UserServiceImpl @Autowired constructor(private val repository: UserReposit
     }
 
     override fun registerUser(userDto: UserDTO) {
-        val foundUsers = repository.findByUsername(userDto.user)
+        val foundUsers = repository.findByUsername(userDto.name)
         if (!foundUsers.isEmpty()) {
             throw RuntimeException("User already exists")
         }
         val encryptedPassword = BCryptPasswordEncoder(4).encode(userDto.password)
-        val user = User(userDto.user, encryptedPassword)
+        val user = User(userDto.name, encryptedPassword)
         save(user)
     }
 
@@ -68,14 +99,14 @@ class UserServiceImpl @Autowired constructor(private val repository: UserReposit
         user ?: return null
         val activeRound = circleService.findActiveRoundForCircle(circlename)
         activeRound ?: return null
-        val relsOfRound = userRoundRepository.findByRound(activeRound).filter { it.eliminated == -1 }
-        if (relsOfRound.size <2) {
+        val relsOfRound = userRoundRepository.findByRound(activeRound).filter { it.eliminated == -1 }.sortedBy { it.userRank }
+        if (relsOfRound.size < 2) {
             return null
         }
         val userRel = relsOfRound.filter { it.user.username == username }.firstOrNull()
         userRel ?: return null
         val nextUser = relsOfRound[((relsOfRound.indexOf(userRel)) + 1) % relsOfRound.size].user
-        return UserDTO(nextUser.username, nextUser.password)
+        return UserDTO(nextUser.username, null)
     }
 
     override fun killVictim(username: String, circlename: String) {
@@ -85,17 +116,16 @@ class UserServiceImpl @Autowired constructor(private val repository: UserReposit
         activeRound ?: return
         val allPlayersInRound = userRoundRepository.findByRound(activeRound)
         val alivePlayersInRound = allPlayersInRound.filter { it.eliminated == -1 }
-        val victimRel = alivePlayersInRound.filter { it.user.username == nextVictim.user }.firstOrNull()
+        val victimRel = alivePlayersInRound.filter { it.user.username == nextVictim.name }.firstOrNull()
         victimRel ?: return
         victimRel.eliminated = allPlayersInRound.size - alivePlayersInRound.size
     }
 
     override fun getUserInformation(username: String): PlayerDTO {
-        val foundUsers = findByUsername(username)
-        if (foundUsers.isEmpty()) {
+        val user = findByUsername(username)
+        if (user === null) {
             throw RuntimeException("User not found")
         }
-        val user = foundUsers[0]
         val circlesOfUser = circleService.findCirclesOfUser(username)
         val circleParticipations = mutableListOf<CircleParticipationDTO>()
         for (circle in circlesOfUser) {
@@ -105,7 +135,7 @@ class UserServiceImpl @Autowired constructor(private val repository: UserReposit
             val circleParticipationDTO = CircleParticipationDTO(circleDTO, nextVictim, isAliveInCircle)
             circleParticipations.add(circleParticipationDTO)
         }
-        val userDTO = UserDTO(user.user, user.password)
+        val userDTO = UserDTO(user.name, user.password)
         return PlayerDTO(userDTO, circleParticipations)
 
     }

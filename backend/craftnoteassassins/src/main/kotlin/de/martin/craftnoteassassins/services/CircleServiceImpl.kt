@@ -1,5 +1,6 @@
 package de.martin.craftnoteassassins.services
 
+import de.martin.craftnoteassassins.dtos.CircleDTO
 import de.martin.craftnoteassassins.dtos.UserDTO
 import de.martin.craftnoteassassins.entities.Circle
 import de.martin.craftnoteassassins.entities.Relation
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 import java.lang.RuntimeException
+import java.util.*
 
 @Repository
 @Transactional(readOnly = false)
@@ -39,7 +41,7 @@ class CircleServiceImpl : CircleService {
         val circle = circleRepository.findByName(circleName).firstOrNull()
         circle ?: return
         if (circle.users.size < 3) {
-            return
+            throw RuntimeException("this circle has not enough users to be activated")
         }
         val activeRound = getActiveRoundOfCircle(circle)
         if (activeRound != null) {
@@ -73,6 +75,10 @@ class CircleServiceImpl : CircleService {
         return foundCircles.firstOrNull()
     }
 
+    override fun findAllCircles(): List<CircleDTO> {
+        val foundCircles = circleRepository.findAll()
+        return foundCircles.map { CircleDTO(it.name) }
+    }
 
     override fun createCircle(circleName: String, user: String) {
         val circle = circleRepository.findByName(circleName)
@@ -118,6 +124,6 @@ class CircleServiceImpl : CircleService {
 
     private fun createPermutatedRankList(n: Int): List<Int> {
         val range = (0..(n - 1))
-        return range.shuffled()
+        return range.shuffled(Random())
     }
 }

@@ -1,17 +1,13 @@
 import {Round} from './round';
 import {Player} from './player';
 
-export class Circle {
-  private name = '';
+export class Circle  implements ICircle{
+  name : string= '';
   private _players: Player[] = []
-  private rounds: Round[] = []
+  rounds: IRound[] = []
 
   constructor(name) {
     this.name = name;
-  }
-
-  getName() {
-    return this.name;
   }
 
   addPlayer(player) {

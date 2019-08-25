@@ -12,7 +12,7 @@ import {switchMap} from 'rxjs/operators';
   styleUrls: ['./circle.component.css']
 })
 export class CircleComponent implements OnInit {
-  circle: Circle;
+  circle: ICircle;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -25,8 +25,8 @@ export class CircleComponent implements OnInit {
     });
   }
 
-  getCurrentRound(): Round{
-    let roundsWithAlivePlayers = this.circle.getRounds().filter((round) => round.livingPlayers.length !== 0)
+  getCurrentRound(): IRound{
+    let roundsWithAlivePlayers = this.circle.rounds.filter((round) => round.alivePlayers.length !== 0)
     if(roundsWithAlivePlayers.length === 0){
       return null
     }

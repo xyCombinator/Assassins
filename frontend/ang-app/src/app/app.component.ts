@@ -9,8 +9,12 @@ import {Circle} from './Model/circle';
 export class AppComponent {
   title = 'ang-app'
   currentCircle: Circle;
+  displayLoginScreen = true
 
   setCurrentCircle(circle: Circle) {
     this.currentCircle = circle;
+  }
+  onLogIn(){
+    this.displayLoginScreen = false
   }
 }

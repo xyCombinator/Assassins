@@ -1,5 +1,6 @@
 package de.martin.craftnoteassassins.controller
 
+import de.martin.craftnoteassassins.dtos.CircleDTO
 import de.martin.craftnoteassassins.dtos.UserDTO
 import de.martin.craftnoteassassins.services.CircleService
 import de.martin.craftnoteassassins.services.UserService
@@ -19,7 +20,7 @@ class CircleControler @Autowired constructor(val circleService: CircleService, v
         }
         val findCirclesOfUser = circleService.findCirclesOfUser(user.name).map { it.name }
         if(findCirclesOfUser.contains(circle)){
-            return "user already belongs to circle"
+            return "name already belongs to circle"
         }
 
         userService.joinCircle(user.name, circle)
@@ -35,6 +36,23 @@ class CircleControler @Autowired constructor(val circleService: CircleService, v
         circleService.createCircle(circle, user.name)
         return "circle created"
     }
+
+    @PostMapping("/circles/{circleId}/activate")
+    fun activateCircle (@PathVariable("circleId") circle: String, user: Principal): String {
+        val foundCircle = circleService.findCircle(circle) ?: return "circle does not exist"
+        if(foundCircle.owner.username != user.name){
+            return "this is not your circle"
+        }
+        circleService.activateCircle(circle)
+        return "circle activated"
+    }
+
+    @GetMapping("/circles")
+    fun listAllCircles (): List<CircleDTO> {
+        return circleService.findAllCircles()
+    }
+
+
 
 
 }

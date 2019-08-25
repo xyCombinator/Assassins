@@ -17,7 +17,7 @@ export class CurrentRoundComponent {
   @Output() victimKilledEvent: EventEmitter<any> = new EventEmitter();
 
   getNextVictim(): Player{
-    let foundVictims = this.round.livingPlayers.filter((player) => player.userName === this.round.victim.userName)
+    let foundVictims = this.round.livingPlayers.filter((player) => player.name === this.round.victim.name)
 
     if(foundVictims.length !== 1){
       return null

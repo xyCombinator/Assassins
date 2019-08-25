@@ -11,11 +11,11 @@ import java.lang.RuntimeException
 class UserDetailsServiceImpl  @Autowired constructor(val userService: UserService) : UserDetailsService{
 
     override fun loadUserByUsername(username: String): UserDetails {
-        val user = userService.findByUsername(username)
-        if(user.isEmpty()){
-            throw RuntimeException("no user found")
+        val user = userService.findByUsernameForPrincipal(username)
+        if(user === null){
+            throw RuntimeException("no name found")
         }
-        return UserPrincipalImp(user[0])
+        return UserPrincipalImp(user)
     }
 
 }

@@ -15,7 +15,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.ActiveProfiles
@@ -78,13 +77,13 @@ class UserPersistenceTest {
     fun testStuff() {
         val users = circleService.findUsersOfCircle(CIRCLE_NAME)
         Assertions.assertEquals(3, users.size)
-        val victim1 = userService.findNextVictim(users[0].user, CIRCLE_NAME)
-        val victim2 = userService.findNextVictim(users[1].user, CIRCLE_NAME)
-        val victim3 = userService.findNextVictim(users[2].user, CIRCLE_NAME)
+        val victim1 = userService.findNextVictim(users[0].name, CIRCLE_NAME)
+        val victim2 = userService.findNextVictim(users[1].name, CIRCLE_NAME)
+        val victim3 = userService.findNextVictim(users[2].name, CIRCLE_NAME)
         if (victim1 != null && victim2 != null && victim3 != null) {
-            Assertions.assertNotEquals(victim1.user, victim2.user)
-            Assertions.assertNotEquals(victim2.user, victim3.user)
-            Assertions.assertNotEquals(victim3.user, victim1.user)
+            Assertions.assertNotEquals(victim1.name, victim2.name)
+            Assertions.assertNotEquals(victim2.name, victim3.name)
+            Assertions.assertNotEquals(victim3.name, victim1.name)
         } else {
             Assertions.fail("something is null")
         }
@@ -95,32 +94,32 @@ class UserPersistenceTest {
     fun testAssassination() {
         val users = circleService.findUsersOfCircle(CIRCLE_NAME)
         Assertions.assertEquals(3, users.size)
-        val victim1 = userService.findNextVictim(users[0].user, CIRCLE_NAME)
-        val victim2 = userService.findNextVictim(users[1].user, CIRCLE_NAME)
-        val victim3 = userService.findNextVictim(users[2].user, CIRCLE_NAME)
+        val victim1 = userService.findNextVictim(users[0].name, CIRCLE_NAME)
+        val victim2 = userService.findNextVictim(users[1].name, CIRCLE_NAME)
+        val victim3 = userService.findNextVictim(users[2].name, CIRCLE_NAME)
         if (victim1 != null && victim2 != null && victim3 != null) {
-            Assertions.assertNotEquals(victim1.user, victim2.user)
-            Assertions.assertNotEquals(victim2.user, victim3.user)
-            Assertions.assertNotEquals(victim3.user, victim1.user)
+            Assertions.assertNotEquals(victim1.name, victim2.name)
+            Assertions.assertNotEquals(victim2.name, victim3.name)
+            Assertions.assertNotEquals(victim3.name, victim1.name)
         } else {
             Assertions.fail<Unit>("something is null")
             return
         }
-        val victimOfUser0Victim = userService.findNextVictim(victim1.user, CIRCLE_NAME)
-        userService.killVictim(users[0].user, "cool guys")
-        val newVictimOfUser0 = userService.findNextVictim(users[0].user, CIRCLE_NAME)
+        val victimOfUser0Victim = userService.findNextVictim(victim1.name, CIRCLE_NAME)
+        userService.killVictim(users[0].name, "cool guys")
+        val newVictimOfUser0 = userService.findNextVictim(users[0].name, CIRCLE_NAME)
 
         if (victimOfUser0Victim == null || newVictimOfUser0 == null) {
             Assertions.fail<Unit>("something is null")
             return
         }
-        Assertions.assertEquals(newVictimOfUser0.user, victimOfUser0Victim.user)
-        val victimOfNewUser0Victim = userService.findNextVictim(newVictimOfUser0.user, CIRCLE_NAME);
+        Assertions.assertEquals(newVictimOfUser0.name, victimOfUser0Victim.name)
+        val victimOfNewUser0Victim = userService.findNextVictim(newVictimOfUser0.name, CIRCLE_NAME);
         if (victimOfNewUser0Victim == null) {
             Assertions.fail<Unit>("something is null")
             return
         }
-        Assertions.assertEquals(victimOfNewUser0Victim.user, users[0].user)
+        Assertions.assertEquals(victimOfNewUser0Victim.name, users[0].name)
     }
 
     @Test

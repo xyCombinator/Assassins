@@ -13,7 +13,7 @@ data class Relation(
         @JoinColumn(name = "roundid")
         val round: Round,
 
-        var rank2: Int,
+        var userRank: Int,
         var eliminated: Int,
 
         @Id

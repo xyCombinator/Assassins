@@ -1,4 +1,5 @@
-<mat-sidenav-container class="example-container">
+<login *ngIf="displayLoginScreen" (loggedIn)="onLogIn()"></login>
+<mat-sidenav-container *ngIf="!displayLoginScreen" class="example-container">
   <mat-sidenav mode="side" opened>
     <app-circles (circleSelected)="setCurrentCircle($event)"></app-circles>
   </mat-sidenav>

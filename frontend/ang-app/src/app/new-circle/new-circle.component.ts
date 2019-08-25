@@ -21,9 +21,9 @@ export class NewCircleComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.cs.getCircles().subscribe((circles) => {
+    this.cs.getCircles().subscribe((circles: ICircle[]) => {
       this.existingNames.splice(0, this.existingNames.length);
-      circles.map((circle) => circle.getName()).forEach(name => this.existingNames.push(name));
+      circles.map<string>((circle) => circle.name).forEach(name => this.existingNames.push(name));
       console.log(this.existingNames);
 
     });
