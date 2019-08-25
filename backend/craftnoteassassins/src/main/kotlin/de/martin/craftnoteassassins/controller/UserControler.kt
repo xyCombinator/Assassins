@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*
 import java.security.Principal
 
 @RestController
-class RegistrationController @Autowired constructor(val userService: UserService) {
+class UserControler @Autowired constructor(val userService: UserService) {
 
     @PostMapping("/register")
     fun register(@RequestBody userDto: UserDTO): UserDTO {
@@ -37,6 +37,4 @@ class RegistrationController @Autowired constructor(val userService: UserService
         return user
 
     }
-
-
 }

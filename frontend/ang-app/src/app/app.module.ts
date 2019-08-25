@@ -6,12 +6,11 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {CirclesComponent} from './circles/circles.component';
 import {CircleService} from './services/CircleService';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
   MatButtonModule, MatCardModule, MatFormFieldModule, MatInputModule, MatOptionModule, MatListModule, MatSidenavModule,
   MatToolbarModule
 } from '@angular/material';
-
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations'
 import { CircleComponent } from './circle/circle.component';
 import { RoundComponent } from './round/round.component';
 import {RouterModule, Routes} from '@angular/router';
@@ -19,6 +18,10 @@ import { NewCircleComponent } from './new-circle/new-circle.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { CurrentRoundComponent } from './current-round/current-round.component';
 import { LoginComponent } from './login/login.component';
+import { PreviousRoundsComponent } from './previous-rounds/previous-rounds.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { ContentComponentComponent } from './content-component/content-component.component';
+import { LogoutComponent } from './logout/logout.component';
 
 
 
@@ -31,6 +34,9 @@ import { LoginComponent } from './login/login.component';
     NewCircleComponent,
     CurrentRoundComponent,
     LoginComponent,
+    PreviousRoundsComponent,
+    ContentComponentComponent,
+    LogoutComponent,
   ],
   imports: [
     BrowserModule,
@@ -46,7 +52,8 @@ import { LoginComponent } from './login/login.component';
     MatButtonModule,
     MatSidenavModule,
     MatToolbarModule,
-    MatCardModule
+    MatCardModule,
+    FlexLayoutModule
   ],
   providers: [CircleService],
   bootstrap: [AppComponent]

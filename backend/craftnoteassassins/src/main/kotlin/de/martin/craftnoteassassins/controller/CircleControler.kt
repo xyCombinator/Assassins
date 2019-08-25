@@ -5,6 +5,8 @@ import de.martin.craftnoteassassins.dtos.UserDTO
 import de.martin.craftnoteassassins.services.CircleService
 import de.martin.craftnoteassassins.services.UserService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import java.security.Principal
@@ -13,38 +15,39 @@ import java.security.Principal
 class CircleControler @Autowired constructor(val circleService: CircleService, val userService: UserService){
 
     @PostMapping("/circles/{circleId}/join")
-    fun join (@PathVariable("circleId") circle: String, user: Principal): String {
+    fun join (@PathVariable("circleId") circle: String, user: Principal): Any {
         val foundCircle = circleService.findCircle(circle)
         if(foundCircle === null){
-            return "circleNotFound"
+            return ResponseEntity<Any>(HttpStatus.NOT_FOUND)
+
         }
         val findCirclesOfUser = circleService.findCirclesOfUser(user.name).map { it.name }
         if(findCirclesOfUser.contains(circle)){
-            return "name already belongs to circle"
+            return ResponseEntity<Any>(HttpStatus.BAD_REQUEST)
         }
 
         userService.joinCircle(user.name, circle)
-        return "successfully joined circle"
+        return ResponseEntity<Any>(HttpStatus.OK)
     }
 
     @PostMapping("/circles/{circleId}")
-    fun createCircle (@PathVariable("circleId") circle: String, user: Principal): String {
+    fun createCircle (@PathVariable("circleId") circle: String, user: Principal): Any {
         val foundCircle = circleService.findCircle(circle)
         if(foundCircle !== null){
-            return "circle already exists"
+            return ResponseEntity<Any>(HttpStatus.BAD_REQUEST)
         }
         circleService.createCircle(circle, user.name)
-        return "circle created"
+        return ResponseEntity<Any>(HttpStatus.OK)
     }
 
     @PostMapping("/circles/{circleId}/activate")
-    fun activateCircle (@PathVariable("circleId") circle: String, user: Principal): String {
-        val foundCircle = circleService.findCircle(circle) ?: return "circle does not exist"
+    fun activateCircle (@PathVariable("circleId") circle: String, user: Principal): Any {
+        val foundCircle = circleService.findCircle(circle) ?: return ResponseEntity<Any>(HttpStatus.NOT_FOUND)
         if(foundCircle.owner.username != user.name){
-            return "this is not your circle"
+            return ResponseEntity<Any>(HttpStatus.BAD_REQUEST)
         }
         circleService.activateCircle(circle)
-        return "circle activated"
+        return ResponseEntity.ok(CircleDTO(circle, UserDTO(user.name, null)))
     }
 
     @GetMapping("/circles")

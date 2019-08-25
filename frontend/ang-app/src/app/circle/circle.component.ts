@@ -1,10 +1,8 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Circle} from '../Model/circle';
-import {Round} from '../Model/round';
+import {Component, OnInit} from '@angular/core';
 
 import {CircleService} from '../services/CircleService';
-import {Router, ActivatedRoute, ParamMap} from '@angular/router';
-import {switchMap} from 'rxjs/operators';
+import { ActivatedRoute} from '@angular/router';
+import { UserService } from '../user-service.service';
 
 @Component({
   selector: 'app-circle',
@@ -12,24 +10,60 @@ import {switchMap} from 'rxjs/operators';
   styleUrls: ['./circle.component.css']
 })
 export class CircleComponent implements OnInit {
+  circleName: string
   circle: ICircle;
+  currentRound: IRound
+  isActive: boolean = false
+  canBeActivated: boolean = false
+  playerWon:boolean = false
+
 
   constructor(private route: ActivatedRoute,
-              private router: Router,
-              private service: CircleService) {
+              private service: CircleService,
+              private userService: UserService) {
   }
 
   ngOnInit() {
-    this.route.paramMap.pipe(switchMap((params: ParamMap) => this.service.getCircleByName(params.get('name')))).subscribe((circ) => {
-      this.circle = circ;
-    });
+    this.route.paramMap.subscribe((map) => {
+      this.circleName = map.get('name')
+      this.userService.loginFromStored()
+      this.userService.playerSubject.subscribe((player) => {
+        const circleInPlayer = this.findCircleInPlayer(this.circleName, player)
+        if(!circleInPlayer){
+          return
+        }
+        this.circle = circleInPlayer
+        this.setCurrentRound()
+        this.updateActivationButton()
+      })
+    })
   }
 
-  getCurrentRound(): IRound{
-    let roundsWithAlivePlayers = this.circle.rounds.filter((round) => round.alivePlayers.length !== 0)
+  setCurrentRound(){
+    let roundsWithAlivePlayers = this.circle.rounds.filter((round) => round.alivePlayers.length !== 1)
     if(roundsWithAlivePlayers.length === 0){
-      return null
+      this.currentRound = null
+      return
     }
-    return roundsWithAlivePlayers[0]
+    this.currentRound = roundsWithAlivePlayers[0]
+  }
+
+  private findCircleInPlayer(circleName: string, player: IPlayer){
+    const foundCirc = player.circles.filter((c) => c.name === circleName)
+    if(foundCirc.length === 1){
+     return foundCirc[0]
+    }
+    return null
+  }
+
+  private updateActivationButton(){
+    this.canBeActivated = 
+          this.circle.players.length >= 3 
+          && this.circle.owner.name === this.userService.getLoggedInPlayer().name
+          && this.currentRound == null
+  }
+
+  activateCircle(){
+    this.service.activateCircle(this.circle.name)
   }
 }

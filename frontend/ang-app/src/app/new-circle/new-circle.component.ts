@@ -12,21 +12,23 @@ export class NewCircleComponent implements OnInit {
   existingNames: string[] = [];
 
   newCircleFormGroup = this.fb.group({
-    nameControl: ['', Validators.minLength(8), CustomValidators.doesNotContain(this.existingNames)],
-    maxNumberOfPlayers: ['', [Validators.min(3), Validators.pattern('^[1-9][0-9]*$')]],
+    nameControl: ['', [Validators.required, Validators.minLength(8)], CustomValidators.doesNotContain(this.existingNames)],
   });
 
-
-  constructor(private fb: FormBuilder, private cs: CircleService) {
+  constructor(private fb: FormBuilder, private circleService: CircleService) {
   }
 
   ngOnInit() {
-    this.cs.getCircles().subscribe((circles: ICircle[]) => {
+    this.circleService.getCircles().subscribe((circles: ICircle[]) => {
       this.existingNames.splice(0, this.existingNames.length);
       circles.map<string>((circle) => circle.name).forEach(name => this.existingNames.push(name));
-      console.log(this.existingNames);
-
+      
     });
+  }
+
+  onSubmit(){
+    const circleName = this.newCircleFormGroup.controls['nameControl'].value
+    this.circleService.createNewCircle(circleName)
   }
 
 }

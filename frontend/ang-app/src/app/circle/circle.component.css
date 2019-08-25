@@ -26,3 +26,7 @@ mat-card{
   width: 100%;
   text-align: center
 }
+
+#activate-button{
+  left: 100px;
+}

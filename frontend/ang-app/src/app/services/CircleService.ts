@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Observable} from "rxjs/index";
 import {Subject} from 'rxjs';
-import {Round} from '../Model/round';
 import { UserService } from '../user-service.service';
 import { HttpClient,HttpHeaders } from '@angular/common/http';
 
@@ -30,16 +29,17 @@ export class CircleService {
     return null
   }
 
-  async killVictimInRound(roundToKill: Round) {
+  async killVictimInRound(round: IRound) {
     const user = this.userService.getLoggedInPlayer().name
     const userInfo = this.userService.getUserInfo()
     let headers = new HttpHeaders();
+    headers = headers.set("X-Requested-With", "XMLHttpRequest")
     headers= headers.set('Authorization', userInfo);
     headers= headers.set('content-type', 'application/json');
 
     let result: Promise<Boolean>
     try{
-    let res:IPlayer= await this.http.get<IPlayer>("/api/users/"+user, {headers}).toPromise()
+    let res:IPlayer= await this.http.post<IPlayer>(`/api/users/${user}/circle/${round.circleName}/killVictim`, {headers}).toPromise()
     this.userService.updateLoggedInPlayer(res)
 
     result = new Promise((resolve, reject) => resolve(true))
@@ -51,6 +51,7 @@ export class CircleService {
   async getAllCircles(){
     const userInfo = this.userService.getUserInfo()
     let headers = new HttpHeaders();
+    headers = headers.set("X-Requested-With", "XMLHttpRequest")
     headers= headers.set('Authorization', userInfo);
     headers= headers.set('content-type', 'application/json');
 
@@ -58,6 +59,46 @@ export class CircleService {
     let res:ICircle[]= await this.http.get<ICircle[]>("/api/circles", {headers}).toPromise()
     this.circles.next(res)
    }
+
+  async joinCircle(circleName: string){
+    const userInfo = this.userService.getUserInfo()
+    let headers = new HttpHeaders();
+    headers = headers.set("X-Requested-With", "XMLHttpRequest")
+    headers= headers.set('Authorization', userInfo);
+    headers= headers.set('content-type', 'application/json');
+    try{
+      let res:ICircle[]= await this.http.post<ICircle[]>(`/api/circles/${circleName}/join`, {headers}).toPromise()
+    }
+    finally{
+      this.userService.loginFromStored()
+    }
+  }
+
+  async activateCircle(circleName: string){
+    const userInfo = this.userService.getUserInfo()
+    let headers = new HttpHeaders();
+    headers = headers.set("X-Requested-With", "XMLHttpRequest")
+    headers= headers.set('Authorization', userInfo);
+    headers= headers.set('content-type', 'application/json');
+    try{
+      let res:ICircle[]= await this.http.post<ICircle[]>(`/api/circles/${circleName}/activate`, {headers}).toPromise()
+    }
+    finally{
+      this.userService.loginFromStored()
+    }
+  }
+
+  async createNewCircle(circleName: string){
+    const userInfo = this.userService.getUserInfo()
+    let headers = new HttpHeaders();
+    headers = headers.set("X-Requested-With", "XMLHttpRequest")
+    headers= headers.set('Authorization', userInfo);
+    headers= headers.set('content-type', 'application/json');
+    try{
+      let res:ICircle[]= await this.http.post<ICircle[]>(`/api/circles/${circleName}`, {headers}).toPromise()
+    } catch{
+    }
+  }
 
 
 }

@@ -1,0 +1,14 @@
+<div class="container" fxLayout="row wraps" fxLayout.lt-md="column" 
+     fxLayoutGap="15px grid" fxLayoutAlign="flex start">
+  <div *ngFor="let round of finishedRounds">
+    <mat-card class="round-card"> 
+      <mat-card-header>
+          <mat-card-title>{{round.number}}</mat-card-title>
+          <mat-card-subtitle>20.08.2019</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        {{round.winner}}
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

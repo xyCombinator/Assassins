@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import {Player} from './Model/player';
 import { HttpClient,HttpHeaders } from '@angular/common/http';
 import {Subject} from 'rxjs';
 
@@ -8,20 +7,18 @@ const HOST_ADDRESS = "/api"
   providedIn: 'root'
 })
 export class UserService {
-  private klaus = new Player('Klaus')
-  private martin = new Player('Martin')
-  
-  private ulla = new Player('Ulla')
   private loggedInPlayer: IPlayer
-  private password: string
 
-  execChange: Subject<IPlayer> = new Subject<IPlayer>()
+  playerSubject: Subject<IPlayer> = new Subject<IPlayer>()
 
-  constructor(private http: HttpClient) { }
-
-  getAllPlayers(){
-    return [this.klaus, this.ulla, this.martin]
-  }
+  constructor(private http: HttpClient) {
+    setInterval(()=>{
+      const res = this.loginFromStored()
+      res.catch(()=>{
+        console.log("this broke, so what")
+      })
+    }, 2500)
+   }
   getLoggedInPlayer(){
     return this.loggedInPlayer
   }
@@ -32,10 +29,9 @@ export class UserService {
     headers= headers.set('content-type', 'application/json');
     let result: Promise<Boolean>
     try{
-    let res = await this.http.post(HOST_ADDRESS+"/register", userDTO, {headers}).toPromise()
-    this.loggedInPlayer = new Player(user)
-    this.password = password
-
+    let res: IPlayer = await this.http.post<IPlayer>(HOST_ADDRESS+"/register", userDTO, {headers}).toPromise()
+    this.storeUserInfo(user, password)
+    this.loggedInPlayer = res
     result = new Promise((resolve, reject) => resolve(true))
     } catch(error){
       result = new Promise((resolve, reject) => reject("Registration failed"))
@@ -44,18 +40,26 @@ export class UserService {
   }
 
   async login(user: string, password: string){
-    let headers = new HttpHeaders();
     let baseAuth = this.storeUserInfo(user, password)
-    console.log(baseAuth)
-    headers= headers.set('Authorization', baseAuth);
+    return this.loginFromStored()
+  }
+
+  async loginFromStored(){
+    const userName = localStorage.getItem('username')
+    if(!userName){
+      return Promise.reject()
+    }
+    const base = localStorage.getItem('userInfo')
+    let headers = new HttpHeaders();
+    headers = headers.set("X-Requested-With", "XMLHttpRequest")
+    headers= headers.set('Authorization', base);
     headers= headers.set('content-type', 'application/json');
 
     let success: Promise<Boolean>
     try{
-      let res= await this.http.get(HOST_ADDRESS+"/users/"+user, {headers}).toPromise()
-      this.loggedInPlayer = new Player(user)
-      let player = res as IPlayer
-      this.password = password
+      let res: IPlayer= await this.http.get<IPlayer>(HOST_ADDRESS+"/users/"+userName, {headers}).toPromise()
+      this.loggedInPlayer = res
+      this.updateLoggedInPlayer(res)
       success = new Promise((resolve, reject) => resolve(true))
     } catch(error){
       success = new Promise((resolve, reject) => reject("Login failed"))
@@ -66,6 +70,7 @@ export class UserService {
   private storeUserInfo(username: string, password: string){
     const baseAuth = `Basic ${window.btoa(`${username}:${password}`)}`
     localStorage.setItem("userInfo", baseAuth)
+    localStorage.setItem("username", username)
     return baseAuth
   }
 
@@ -74,7 +79,7 @@ export class UserService {
   }
 
   updateLoggedInPlayer(player: IPlayer){
-    this.execChange.next(player)
+    this.playerSubject.next(player)
+    this.loggedInPlayer = player
   }
-
 }

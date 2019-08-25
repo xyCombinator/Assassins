@@ -1,6 +1,4 @@
-import { Circle } from './circle';
-
-export class Player implements IPlayer{
+export class Player2 implements IPlayer{
   private _name: string;
   private _circles: ICircle[] = []
   constructor(name: string) {
@@ -12,11 +10,10 @@ export class Player implements IPlayer{
   }
 
   get circles(){
-    return this.circles
+    return this._circles
   }
 
   set circles(circles: ICircle[]){
     this.circles = circles;
   }
-
 }

@@ -77,7 +77,7 @@ class CircleServiceImpl : CircleService {
 
     override fun findAllCircles(): List<CircleDTO> {
         val foundCircles = circleRepository.findAll()
-        return foundCircles.map { CircleDTO(it.name) }
+        return foundCircles.map { CircleDTO(it.name, UserDTO(it.owner.username, null)) }
     }
 
     override fun createCircle(circleName: String, user: String) {

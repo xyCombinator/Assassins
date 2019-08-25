@@ -1,8 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import {Round} from '../Model/round';
-import {Player} from '../Model/player';
 import {CircleService} from '../services/CircleService';
-import { UserService } from '../user-service.service';
 
 @Component({
   selector: 'current-round',
@@ -10,19 +7,29 @@ import { UserService } from '../user-service.service';
   styleUrls: ['./current-round.component.css']
 })
 export class CurrentRoundComponent {
+
+  nextVictim: IPlayer
+  _round: IRound
   constructor(private service: CircleService){
   }
 
-  @Input() round: Round
+  @Input() 
+  set round(round: IRound){
+    this._round = round
+    if(!round){
+      return 
+    }
+    this.setNextVictim()
+  }
+
+  get round(){
+    return this._round
+  }
+
   @Output() victimKilledEvent: EventEmitter<any> = new EventEmitter();
 
-  getNextVictim(): Player{
-    let foundVictims = this.round.livingPlayers.filter((player) => player.name === this.round.victim.name)
-
-    if(foundVictims.length !== 1){
-      return null
-    }
-    return foundVictims[0]
+  private setNextVictim(){
+    this.nextVictim = this.round.nextVictim
   }
 
   killVictim(){

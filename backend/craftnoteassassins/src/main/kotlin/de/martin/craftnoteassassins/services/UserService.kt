@@ -38,7 +38,12 @@ class UserServiceImpl @Autowired constructor(private val repository: UserReposit
         if (user === null) {
             return null
         }
-        val circles = user.circles.map { CircleDTO(it.circle.name) }
+        var circles: MutableList<CircleDTO> = arrayListOf()
+        for(circleInp in user.circles){
+            val circle = CircleDTO(circleInp.circle.name, UserDTO(circleInp.circle.owner.username, null))
+            circle.players = circleInp.circle.users.map{UserDTO(it.user.username, null)}.toMutableList()
+            circles.add(circle)
+        }
         val rounds = userRoundRepository.findByUser(user).map { it.round }
         val roundDtos: List<RoundDTO> = rounds.map {
             val n = it.roundNumber
@@ -129,7 +134,7 @@ class UserServiceImpl @Autowired constructor(private val repository: UserReposit
         val circlesOfUser = circleService.findCirclesOfUser(username)
         val circleParticipations = mutableListOf<CircleParticipationDTO>()
         for (circle in circlesOfUser) {
-            val circleDTO = CircleDTO(circle.name)
+            val circleDTO = CircleDTO(circle.name, UserDTO(circle.owner.username, null))
             val nextVictim = findNextVictim(username, circle.name)
             val isAliveInCircle = circleService.isUserAliveInCircle(username, circle.name)
             val circleParticipationDTO = CircleParticipationDTO(circleDTO, nextVictim, isAliveInCircle)

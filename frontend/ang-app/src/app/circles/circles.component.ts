@@ -1,7 +1,7 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {CircleService} from '../services/CircleService';
-import {Circle} from '../Model/circle';
 import { UserService } from '../user-service.service';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-circles',
@@ -13,38 +13,78 @@ export class CirclesComponent implements OnInit {
   loggedInPlayer: IPlayer
   @Output() circleSelected = new EventEmitter<ICircle>();
 
-  private circles: ICircle[];
+  private circles: ICircle[] = []
+  private circleButtons: CircleButton[] = []
 
-  constructor(private circleService: CircleService, private userService: UserService) {
+  constructor(private circleService: CircleService, private userService: UserService, private router: Router) {
   }
 
   ngOnInit() {
-    this.circleService.getCircles().subscribe((circles) => {
-      this.circles = circles;
-      if (circles && !this.currentCircle) {
-        this.currentCircle = circles[0];
-      }
-    });
     this.setPlayer()
-  }
-
-  setCurrentCircle(circle) {
-    const circleFromPlayer = this.findCircleInPlayer(circle)
-    this.currentCircle = circleFromPlayer
-    this.circleSelected.emit(circleFromPlayer);
-  }
-
-  private findCircleInPlayer(circle: ICircle){
-    const foundCirc = this.loggedInPlayer.circles.filter((c) => c.name === circle.name)
-    if(foundCirc.length === 1){
-      return foundCirc[0]
-    }
-    return null
+    this.setCircles()
   }
 
   private setPlayer(){
-    this.userService.execChange.subscribe((player) => {
+    this.loggedInPlayer = this.userService.getLoggedInPlayer()
+    this.setButtons()
+    this.userService.playerSubject.subscribe(player => {
       this.loggedInPlayer = player
     })
+  }
+  private setCircles(){
+    this.circleService.getCircles().subscribe(circles => {
+      this.circles = circles;
+      this.setButtons()
+
+    })
+  }
+
+  private setButtons(){
+    const buttons: CircleButton[] = []
+
+    for(let circle of this.circles){
+      const name = circle.name
+      let active = false
+      let joined = false
+      const circleOfPlayer = this.loggedInPlayer.circles.filter(circ => circ.name === circle.name)
+      if(circleOfPlayer.length === 1){
+        active = this.isCircleActive(circleOfPlayer[0])
+        joined = this.isPlayerJoined(circleOfPlayer[0].name)
+      }
+      const button = new CircleButton(name, joined, active)
+      buttons.push(button)
+    }
+    this.circleButtons = buttons;
+  }
+  
+  setCurrentCircle(button: CircleButton) {
+    const circle = this.loggedInPlayer.circles.filter(circle => circle.name === button.name)
+    if(circle.length === 0){
+      this.circleService.joinCircle(button.name)
+    }
+    this.router.navigate([`/circle/${button.name}`])
+  }
+
+  private isCircleActive(circle: ICircle){
+    return circle.rounds.filter(round => round.alivePlayers.length > 1).length === 1
+  }
+
+  private isPlayerJoined(circle: string){
+    return this.loggedInPlayer.circles.map(circle => circle.name).filter(name => name === circle).length > 0
+  }
+
+
+
+}
+
+class CircleButton{
+  name: string
+  joined: boolean
+  active: boolean
+
+  constructor(name: string, joined: boolean, active: boolean){
+    this.name = name,
+    this.joined = joined,
+    this.active = active
   }
 }

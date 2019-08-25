@@ -1,10 +1,8 @@
-import {Round} from './round';
-import {Player} from './player';
-
-export class Circle  implements ICircle{
+export class Circle2  {
   name : string= '';
-  private _players: Player[] = []
+  private _players: IPlayer[] = []
   rounds: IRound[] = []
+  owner: IPlayer
 
   constructor(name) {
     this.name = name;
@@ -23,7 +21,7 @@ export class Circle  implements ICircle{
   }
 
 
-  get players(): Player[] {
+  get players(): IPlayer[] {
     return this._players;
   }
 }

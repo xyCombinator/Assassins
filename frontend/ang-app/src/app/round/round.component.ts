@@ -1,5 +1,4 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Round} from '../Model/round';
 
 @Component({
   selector: 'app-round',
@@ -7,7 +6,7 @@ import {Round} from '../Model/round';
   styleUrls: ['./round.component.css']
 })
 export class RoundComponent implements OnInit {
-  @Input() round: Round
+  @Input() round: IRound
   constructor() { }
 
   ngOnInit() {
