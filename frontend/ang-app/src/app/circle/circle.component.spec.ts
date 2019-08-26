@@ -1,16 +1,15 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { CircleComponent } from './circle.component';
+import { CircleComponent } from "./circle.component";
 
-describe('CircleComponent', () => {
+describe("CircleComponent", () => {
   let component: CircleComponent;
   let fixture: ComponentFixture<CircleComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CircleComponent ]
-    })
-    .compileComponents();
+      declarations: [CircleComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,8 +18,7 @@ describe('CircleComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
-
 });

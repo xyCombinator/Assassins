@@ -1,50 +1,47 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input } from "@angular/core";
 
 @Component({
-  selector: 'app-previous-rounds',
-  templateUrl: './previous-rounds.component.html',
-  styleUrls: ['./previous-rounds.component.css']
+  selector: "app-previous-rounds",
+  templateUrl: "./previous-rounds.component.html",
+  styleUrls: ["./previous-rounds.component.css"]
 })
-export class PreviousRoundsComponent{
-  _rounds: FinishedRound[] = []
+export class PreviousRoundsComponent {
+  _rounds: FinishedRound[] = [];
 
   @Input()
-  set circle(circle: ICircle){
-    if(!circle){
-      return
+  set circle(circle: ICircle) {
+    if (!circle) {
+      return;
     }
-    const newRounds: FinishedRound[] = []
-    for(let round of circle.rounds){
-      if(!this.isRoundFinished(round)){
-        continue
+    const newRounds: FinishedRound[] = [];
+    for (let round of circle.rounds) {
+      if (!this.isRoundFinished(round)) {
+        continue;
       }
-      const winner = this.getWinnerOfRound(round)
-      newRounds.push(new FinishedRound(winner.name, round.number))
+      const winner = this.getWinnerOfRound(round);
+      newRounds.push(new FinishedRound(winner.name, round.number));
     }
-    this._rounds = newRounds
+    this._rounds = newRounds;
   }
 
-  get finishedRounds(){
+  get finishedRounds() {
     return this._rounds;
   }
-  private isRoundFinished(round: IRound){
-    return round.alivePlayers.length === 1
+  private isRoundFinished(round: IRound) {
+    return round.alivePlayers.length === 1;
   }
-  
-  private getWinnerOfRound(round: IRound){
-      return round.alivePlayers[0]
+
+  private getWinnerOfRound(round: IRound) {
+    return round.alivePlayers[0];
   }
-  
-  
 }
 
-class FinishedRound{
-  winner: string
-  number: number
+class FinishedRound {
+  winner: string;
+  number: number;
 
-  constructor(winner: string, number: number){
-    this.winner = winner
-    this.number = number
+  constructor(winner: string, number: number) {
+    this.winner = winner;
+    this.number = number;
   }
-  
 }

@@ -1,4 +1,4 @@
-interface IPlayer{
-    name: string    
-    circles: ICircle[]
+interface IPlayer {
+  name: string;
+  circles: ICircle[];
 }

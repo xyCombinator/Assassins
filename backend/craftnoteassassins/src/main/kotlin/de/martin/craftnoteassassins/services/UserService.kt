@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.lang.RuntimeException
+import java.time.LocalDateTime
 
 interface UserService {
     fun save(user: User)
@@ -50,7 +51,7 @@ class UserServiceImpl @Autowired constructor(private val repository: UserReposit
             val alivePlayers = it.relations.filter { it.eliminated == -1 }.map { UserDTO(it.user.username, null) }
             val deadPlayers = it.relations.filter { it.eliminated != -1 }.map { UserDTO(it.user.username, null) }
 
-            val round = RoundDTO(n, it.circle.name, alivePlayers, deadPlayers)
+            val round = RoundDTO(n, it.circle.name, alivePlayers, deadPlayers, it.endTime)
             if (alivePlayers.size > 1) {
                 val nextVictim = findNextVictim(user.username, it.circle.name)
                 round.nextVictim = nextVictim
@@ -124,6 +125,11 @@ class UserServiceImpl @Autowired constructor(private val repository: UserReposit
         val victimRel = alivePlayersInRound.filter { it.user.username == nextVictim.name }.firstOrNull()
         victimRel ?: return
         victimRel.eliminated = allPlayersInRound.size - alivePlayersInRound.size
+
+        //if only two alive players were left then the round ends with this assassination
+        if(alivePlayersInRound.size == 2){
+            activeRound.endTime = LocalDateTime.now()
+        }
     }
 
     override fun getUserInformation(username: String): PlayerDTO {

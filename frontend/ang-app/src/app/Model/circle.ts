@@ -1,8 +1,8 @@
-export class Circle2  {
-  name : string= '';
-  private _players: IPlayer[] = []
-  rounds: IRound[] = []
-  owner: IPlayer
+export class Circle2 {
+  name: string = "";
+  private _players: IPlayer[] = [];
+  rounds: IRound[] = [];
+  owner: IPlayer;
 
   constructor(name) {
     this.name = name;
@@ -12,14 +12,13 @@ export class Circle2  {
     this._players.push(player);
   }
 
-  addRound(round) {
+  saddRound(round) {
     this.rounds.push(round);
   }
 
   getRounds() {
     return this.rounds;
   }
-
 
   get players(): IPlayer[] {
     return this._players;

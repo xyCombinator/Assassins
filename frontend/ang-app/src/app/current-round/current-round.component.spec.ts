@@ -1,16 +1,15 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { CurrentRoundComponent } from './current-round.component';
+import { CurrentRoundComponent } from "./current-round.component";
 
-describe('CurrentRoundComponent', () => {
+describe("CurrentRoundComponent", () => {
   let component: CurrentRoundComponent;
   let fixture: ComponentFixture<CurrentRoundComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CurrentRoundComponent ]
-    })
-    .compileComponents();
+      declarations: [CurrentRoundComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('CurrentRoundComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });
