@@ -1,22 +1,26 @@
-<div *ngIf="round" id="current-round-wrapper">
-    <div (click)="killVictim()" id="kill-area-left" class="kill-area round-block">
-      <p class="victim-name" *ngIf="nextVictim">Kill {{nextVictim.name}}</p>
+<div id="current-round-wrapper">
+  <div *ngIf="round" id="current-round-area">
+    <div
+      (click)="killVictim()"
+      id="kill-area-left"
+      class="kill-area round-block"
+    >
+      <p class="victim-name" *ngIf="nextVictim">Kill {{ nextVictim.name }}</p>
       <p class="victim-name" *ngIf="!nextVictim">You're dead, Amigo</p>
-
     </div>
-    <div class="round-block">
-      <div>Alive Symbol</div>
+    <div class="player-area round-block">
+      <div>Alive:</div>
       <div>
         <ul>
-          <li *ngFor="let player of round?.alivePlayers">{{player.name}}</li>
+          <li *ngFor="let player of round?.alivePlayers">{{ player.name }}</li>
         </ul>
       </div>
-      <div>Dead Symbol</div>
+      <div>Dead:</div>
       <div>
         <ul>
-          <li *ngFor="let player of round?.deadPlayers">{{player.name}}</li>
+          <li *ngFor="let player of round?.deadPlayers">{{ player.name }}</li>
         </ul>
       </div>
-  
     </div>
+  </div>
 </div>

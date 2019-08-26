@@ -1,8 +1,8 @@
 <mat-sidenav-container #sidenavContainer class="example-container">
-    <mat-sidenav mode="side" opened>
-      <app-circles (circleSelected)="setCurrentCircle($event)"></app-circles>
-    </mat-sidenav>
-    <mat-sidenav-content>
-      <router-outlet></router-outlet>
-    </mat-sidenav-content>
-</mat-sidenav-container>  
+  <mat-sidenav mode="side" opened>
+    <app-circles (circleSelected)="setCurrentCircle($event)"></app-circles>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

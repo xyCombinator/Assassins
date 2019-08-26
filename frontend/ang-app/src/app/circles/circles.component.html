@@ -1,8 +1,14 @@
-<button routerLink="new-circle" class="mat-stroked-button">Create new circle</button>
+<button routerLink="new-circle" class="mat-stroked-button">
+  Create new circle
+</button>
 <div>
-  <div *ngFor="let button of circleButtons" (click)="setCurrentCircle(button)" class="button-card-container">
-      <mat-card class="circle-button" [ngClass]="{'join': !button.joined}">
-        {{button.name}}
-      </mat-card>
+  <div
+    *ngFor="let button of circleButtons"
+    (click)="setCurrentCircle(button)"
+    class="button-card-container"
+  >
+    <mat-card class="circle-button" [ngClass]="{ join: !button.joined }">
+      {{ button.name }}
+    </mat-card>
   </div>
 </div>

@@ -1,13 +1,13 @@
-.circle-button{
-    min-width: 150px;
+.circle-button {
+  min-width: 150px;
 }
-.button-card-container{
-    margin-top: 20px;
-    margin-bottom: 20px;
-    margin-left: 8px;
-    margin-right: 8px;
+.button-card-container {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: 8px;
+  margin-right: 8px;
 }
 
-.join{
-    background-color: green;
+.join {
+  background-color: green;
 }

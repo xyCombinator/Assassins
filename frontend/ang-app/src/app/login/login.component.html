@@ -4,33 +4,52 @@
       <div><p id="login-text" class="mat-display-1">Login</p></div>
       <form [formGroup]="loginForm" (ngSubmit)="login()">
         <mat-form-field>
-          <input formControlName="username" matInput placeholder="Username">
+          <input formControlName="username" matInput placeholder="Username" />
         </mat-form-field>
         <mat-form-field>
-          <input formControlName="password" matInput placeholder="Password">
+          <input formControlName="password" matInput placeholder="Password" />
         </mat-form-field>
         <div><button mat-raised-button type="submit">Login</button></div>
       </form>
     </div>
     <div *ngIf="!showLogin" class="login-container">
-        <div><p id="login-text" class="mat-display-1">Register</p></div>
-        <form [formGroup]="registerForm" (ngSubmit)="register()">
-          <mat-form-field>
-            <input formControlName="username" matInput placeholder="Username">
-          </mat-form-field>
-          <mat-form-field>
-            <input formControlName="password" matInput placeholder="New password">
-          </mat-form-field>
-          <mat-form-field>
-              <input formControlName="repeatPassword" matInput placeholder="Repeat password">
-          </mat-form-field>
-          <div><button mat-raised-button type="submit">Register</button></div>
-        </form>
-      </div>
-  
+      <div><p id="login-text" class="mat-display-1">Register</p></div>
+      <form [formGroup]="registerForm" (ngSubmit)="register()">
+        <mat-form-field>
+          <input formControlName="username" matInput placeholder="Username" />
+        </mat-form-field>
+        <mat-form-field>
+          <input
+            type="password"
+            formControlName="password"
+            matInput
+            placeholder="New password"
+          />
+        </mat-form-field>
+        <mat-form-field>
+          <input
+            type="password"
+            formControlName="repeatPassword"
+            matInput
+            placeholder="Repeat password"
+          />
+        </mat-form-field>
+        <div>
+          <button
+            mat-raised-button
+            type="submit"
+            [disabled]="registerForm.invalid"
+          >
+            Register
+          </button>
+        </div>
+      </form>
+    </div>
+
     <div id="register-placeholder"></div>
     <div (click)="toggleLogin()">
       <p *ngIf="showLogin">register</p>
       <p *ngIf="!showLogin">login</p>
+    </div>
   </div>
 </div>

@@ -1,8 +1,25 @@
 <mat-toolbar>
-    {{circleName}}
-    <button mat-raised-button id="activate-button" disabled *ngIf="!canBeActivated && !currentRound">Not enough players</button>
-    <button mat-raised-button id="activate-button" *ngIf="canBeActivated" (click)="activateCircle()">Activate</button>
-    <mat-card *ngIf="playerWon">Thats A Bingo!!</mat-card>
+  {{ circleName }}
+  <button
+    mat-raised-button
+    id="activate-button"
+    disabled
+    *ngIf="!canBeActivated && !currentRound"
+  >
+    Not enough players
+  </button>
+  <button
+    mat-raised-button
+    id="activate-button"
+    *ngIf="canBeActivated"
+    (click)="activateCircle()"
+  >
+    Activate
+  </button>
+  <mat-card *ngIf="playerWon">Thats A Bingo!!</mat-card>
 </mat-toolbar>
-<current-round (victimKilledEvent)="killVictim()" [round]="currentRound"></current-round>
+<current-round
+  (victimKilledEvent)="killVictim()"
+  [round]="currentRound"
+></current-round>
 <app-previous-rounds [circle]="circle"></app-previous-rounds>

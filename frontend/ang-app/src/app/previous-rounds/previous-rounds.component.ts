@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from "@angular/core";
-
+import * as moment from "moment";
 @Component({
   selector: "app-previous-rounds",
   templateUrl: "./previous-rounds.component.html",
@@ -19,7 +19,9 @@ export class PreviousRoundsComponent {
         continue;
       }
       const winner = this.getWinnerOfRound(round);
-      newRounds.push(new FinishedRound(winner.name, round.number));
+      newRounds.push(
+        new FinishedRound(winner.name, round.number, round.endTime)
+      );
     }
     this._rounds = newRounds;
   }
@@ -39,9 +41,11 @@ export class PreviousRoundsComponent {
 class FinishedRound {
   winner: string;
   number: number;
+  endTime: string;
 
-  constructor(winner: string, number: number) {
+  constructor(winner: string, number: number, endTime: Date) {
     this.winner = winner;
     this.number = number;
+    this.endTime = moment(endTime).format("DD/MM HH:mm");
   }
 }

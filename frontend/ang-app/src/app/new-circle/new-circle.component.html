@@ -2,8 +2,14 @@
   <div>
     <mat-form-field>
       <mat-label>Name</mat-label>
-      <input formControlName="nameControl" matInput="text">
+      <input formControlName="nameControl" matInput="text" />
     </mat-form-field>
   </div>
-  <button [disabled]="newCircleFormGroup.invalid" mat-raised-button type="submit">Submit</button>
+  <button
+    [disabled]="newCircleFormGroup.invalid"
+    mat-raised-button
+    type="submit"
+  >
+    Submit
+  </button>
 </form>

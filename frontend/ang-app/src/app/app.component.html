@@ -1,5 +1,6 @@
 <login *ngIf="displayLoginScreen" (loggedIn)="onLogIn()"></login>
 <app-content-component *ngIf="displayContentScreen"></app-content-component>
-<app-logout (logoutEvent)="showLoginPage()" *ngIf="displayContentScreen"></app-logout>
-
-
+<app-logout
+  (logoutEvent)="showLoginPage()"
+  *ngIf="displayContentScreen"
+></app-logout>

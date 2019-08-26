@@ -14,9 +14,7 @@ export class UserService {
   constructor(private http: HttpClient) {
     setInterval(() => {
       const res = this.loginFromStored();
-      res.catch(() => {
-        console.log("this broke, so what");
-      });
+      res.catch(() => {});
     }, 2500);
   }
   getLoggedInPlayer() {
@@ -24,7 +22,7 @@ export class UserService {
   }
 
   async register(user: string, password: string) {
-    const userDTO = JSON.stringify({ user: user, password: password });
+    const userDTO = JSON.stringify({ name: user, password: password });
     let headers = new HttpHeaders();
     headers = headers.set("content-type", "application/json");
     let result: Promise<Boolean>;

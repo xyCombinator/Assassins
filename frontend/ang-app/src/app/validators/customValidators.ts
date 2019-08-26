@@ -1,4 +1,4 @@
-import { AbstractControl, FormControl, ValidatorFn } from "@angular/forms";
+import { AbstractControl, ValidatorFn, FormControl } from "@angular/forms";
 
 export class CustomValidators {
   static doesNotContain(vals: string[]): ValidatorFn {
@@ -12,6 +12,16 @@ export class CustomValidators {
           resolve(["existiert bereits"]);
         }
       });
+    }
+    return f;
+  }
+
+  static repeatedPasswordEqual(password: AbstractControl): ValidatorFn {
+    function f(fc: AbstractControl) {
+      if (fc.value !== password.value) {
+        return { error: "password unequal" };
+      }
+      return null;
     }
     return f;
   }

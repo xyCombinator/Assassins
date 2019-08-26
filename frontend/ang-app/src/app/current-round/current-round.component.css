@@ -1,25 +1,30 @@
-#current-round-wrapper{
-    display: flex;
-    margin: 50px;
-    font-family: Arial, Helvetica, sans-serif
-  }
-  #kill-area-left{
-    background-color: lightcoral;
-    border-radius:15px 0px 0px 15px;
-  }
-  #kill-area-right{
-    background-color: lightblue;
-    border-radius:0px 15px 15px 0px;
-  
-  }
-  
-  .round-block{
-    padding: 3px;
-    height: 200px;
-    width: 100px;
-  }
-  
-  .victim-name{
-    width: 100%;
-    text-align: center
-  }
+#current-round-wrapper {
+  left: 50%;
+  right: 50%;
+  font-family: Arial, Helvetica, sans-serif;
+  height: 400px;
+  text-align: center;
+}
+
+#current-round-area {
+  margin-top: 20px;
+  display: inline-block;
+}
+#kill-area-left {
+  background-color: lightcoral;
+  border-radius: 15px 15px 0px 0px;
+}
+.round-block {
+  padding: 3px;
+  width: 200px;
+}
+
+.player-area {
+  text-align: left;
+  background-color: darkgrey;
+}
+
+.victim-name {
+  width: 100%;
+  text-align: center;
+}

@@ -4,5 +4,5 @@ interface IRound {
   alivePlayers: IPlayer[];
   deadPlayers: IPlayer[];
   nextVictim: IPlayer;
-  endTime: Date
+  endTime: Date;
 }
